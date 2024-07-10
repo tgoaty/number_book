@@ -1,37 +1,45 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '@/app/store/store.ts';
-import {Form, Button, Table, Popconfirm, Input} from 'antd';
-import {changeRecordField, deleteRecord} from '@/app/store/redusers/recordsSlice.ts';
-import EditableCell from '@/shared/ui/EditableCell.tsx';
+import {RootState} from '@/app/store/store';
+import {Form, Button, Table, Popconfirm, FormInstance} from 'antd';
+import {changeRecordField, deleteRecord} from '@/app/store/redusers/recordsSlice';
+import EditableCell from '@/shared/ui/EditableCell';
+import {Record} from '@/shared/types/types';
 
-const RecordsListBlock = () => {
+type ColumnType = {
+    title: string,
+    dataIndex?: string,
+    key: string,
+    editable?: boolean,
+    width: string,
+    render?: (_: any, record: Record) => any
+}
+
+const RecordsListBlock: React.FC = () => {
     const recordsList = useSelector((state: RootState) => state.recordsSlice.recordsList);
     const dispatch = useDispatch();
-    const [form] = Form.useForm();
-    const [editingKey, setEditingKey] = useState('');
-    const [isEditing, setIsEditing] = useState({});
+    const [form] = Form.useForm<FormInstance>();
+    const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         localStorage.setItem('records', JSON.stringify(recordsList));
     }, [recordsList]);
 
-    const handleEdit = (record) => {
-        form.setFieldsValue({...record});
-        setEditingKey(record.mobileNumber);
+    const handleEdit = (record: Record) => {
+        form.setFieldsValue({...record} as any);
         setIsEditing({[record.mobileNumber]: true});
     };
 
     const handleCancel = () => {
-        setEditingKey('');
         setIsEditing({});
     };
 
-    const handleSave = async (key) => {
+
+    const handleSave = async (key: string) => {
         try {
-            const row = await form.validateFields();
-            Object.keys(row).forEach((field) => {
-                dispatch(changeRecordField({mobileNumber: key, field, newValue: row[field]}));
+            const row = await form.validateFields() as Partial<Record>;
+            (Object.keys(row) as Array<keyof Record>).forEach((field) => {
+                dispatch(changeRecordField({mobileNumber: key, field, newValue: row[field] as string}));
             });
             handleCancel();
         } catch (errInfo) {
@@ -39,11 +47,11 @@ const RecordsListBlock = () => {
         }
     };
 
-    const handleDelete = (record) => {
+    const handleDelete = (record: Record) => {
         dispatch(deleteRecord(record.mobileNumber));
     };
 
-    const columns = [
+    const columns: ColumnType[] = [
         {
             title: 'Имя',
             dataIndex: 'firstName',
@@ -90,7 +98,7 @@ const RecordsListBlock = () => {
             title: 'Действия',
             key: 'actions',
             width: '20%',
-            render: (_, record) => {
+            render: (_: any, record: Record) => {
                 const isEditingRecord = isEditing[record.mobileNumber];
                 return isEditingRecord ? (
                     <>
@@ -135,14 +143,14 @@ const RecordsListBlock = () => {
         }
         return {
             ...col,
-            onCell: (record) => ({
+            onCell: (record: Record) => ({
                 record,
                 inputType: 'text',
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing[record.mobileNumber],
             }),
-        };
+        } as ColumnType;
     });
 
     return (

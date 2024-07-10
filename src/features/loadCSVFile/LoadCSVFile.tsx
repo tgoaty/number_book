@@ -3,13 +3,13 @@ import {Button, Modal, Upload} from "antd";
 import {UploadOutlined, VerticalAlignTopOutlined} from "@ant-design/icons";
 import {useDispatch} from "react-redux";
 import Papa from "papaparse";
-import {loadNewRecordsBook} from "@/app/store/redusers/recordsSlice.ts";
+import {loadNewRecordsBook} from "@/app/store/redusers/recordsSlice";
+import {Record} from "@/shared/types/types";
+import {RcFile} from "antd/es/upload";
 
-
-const LoadCsvFile = () => {
+const LoadCsvFile: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -19,25 +19,25 @@ const LoadCsvFile = () => {
         setIsModalOpen(false);
     };
 
-
-    const handleUpload = (file) => {
+    const handleUpload = (file: RcFile): boolean => {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const text = e.target.result;
-            Papa.parse(text, {
+            const text = e.target?.result as string;
+            Papa.parse<Record>(text, {
                 header: true,
                 complete: (results) => {
-                    dispatch(loadNewRecordsBook(results.data));
+                    const records: Record[] = results.data as Record[];
+                    dispatch(loadNewRecordsBook(records));
                 }
             });
         };
-        reader.readAsText(file);
+
+        reader.readAsText(file as File);
         setIsModalOpen(false);
         return false;
     };
+
     return (
-
-
         <>
             <Button title="Загрузить CSV" onClick={showModal}>
                 <VerticalAlignTopOutlined style={{fontSize: 20}}/>

@@ -6,11 +6,3 @@ export type Record = {
     homeNumber: string,
     mobileNumber: string
 }
-export enum recordFields {
-    lastName = "lastName",
-    firstName = "firstName",
-    secondName = "secondName",
-    address = "address",
-    homeNumber = "homeNumber",
-    mobileNumber = "mobileNumber"
-}

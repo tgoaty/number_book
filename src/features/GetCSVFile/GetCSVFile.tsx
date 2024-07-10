@@ -1,4 +1,3 @@
-import React from 'react';
 import {useSelector} from "react-redux";
 import {RootState} from "@/app/store/store.ts";
 import Papa from "papaparse";
@@ -6,13 +5,12 @@ import {Button} from "antd";
 import {VerticalAlignBottomOutlined} from "@ant-design/icons";
 
 
-
 const GetCsvFile = () => {
     const recordList = useSelector((state: RootState) => (state.recordsSlice.recordsList))
 
     const downloadCSV = () => {
         const csv = Papa.unparse(recordList);
-        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const blob = new Blob(["\uFEFF" + csv], {type: 'text/csv;charset=utf-8;'});
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
