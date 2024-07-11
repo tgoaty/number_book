@@ -41,7 +41,12 @@ const AddNewRecordModal: React.FC = () => {
             });
     };
 
-
+    const validatePhoneNumber = (_: any, value: string) => {
+        if (value && value.length < 6) {
+            return Promise.reject('Длина не может быть менее 6 символов.');
+        }
+        return Promise.resolve();
+    };
 
     return (
         <>
@@ -82,7 +87,10 @@ const AddNewRecordModal: React.FC = () => {
                         <Input type="text" placeholder="г. Заринск ул. Пушкина д. 1"/>
                     </Form.Item>
                     <Form.Item name="homeNumber" label="Домашний Номер"
-                               rules={[{required: true, message: 'Пожалуйста введите свой домашний номер!'}]}>
+                               rules={[{
+                                   required: true,
+                                   message: 'Пожалуйста введите свой домашний номер!'
+                               }, {validator: validatePhoneNumber}]}>
                         <Input onKeyPress={(e) => {
                             isDigit(e)
                         }} type="text" placeholder="555555"/>
