@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import {isDigit} from "@/features/addNewRecord/utils/utils.ts";
 import {CountryOption} from "@/features/addNewRecord/types/types.ts";
 
-const PhoneNumberFiled = () => {
+const PhoneNumberField = () => {
     const [mask, setMask] = useState<string>('000 000 00 00');
     const handleSelect = (option: CountryOption) => {
         const countryCode = option.key;
@@ -62,4 +62,4 @@ const PhoneNumberFiled = () => {
     );
 };
 
-export default PhoneNumberFiled;
+export default PhoneNumberField;

@@ -1,4 +1,6 @@
-export const listOfCodes = [
+import {CountryInfo} from "@/shared/types/types.ts";
+
+export const listOfCodes: CountryInfo[] = [
     {"country": "Afghanistan", "code": "93", "iso": "AF", "phoneNumberFormat": "000 000 0000"},
     {"country": "Albania", "code": "355", "iso": "AL", "phoneNumberFormat": "000 000 0000"},
     {"country": "Algeria", "code": "213", "iso": "DZ", "phoneNumberFormat": "000 000 0000"},

@@ -3,9 +3,10 @@ import {Button, Modal, Form, Row, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {addRecord} from "@/app/store/redusers/recordsSlice";
 import {RootState} from "@/app/store/store";
-import PhoneNumberFiled from "@/features/addNewRecord/ui/PhoneNumberFiled.tsx";
+import PhoneNumberField from "@/features/addNewRecord/ui/PhoneNumberField.tsx";
 import {isLetter, isDigit, isDuplicate, normalizeFormValue} from "@/features/addNewRecord/utils/utils.ts";
 import {NotNormalizedFormValue} from "@/features/addNewRecord/types/types.ts";
+
 const AddNewRecordModal: React.FC = () => {
     const [isModalOpen, setIsModelOpen] = useState(false);
     const [form] = Form.useForm();
@@ -87,7 +88,7 @@ const AddNewRecordModal: React.FC = () => {
                         }} type="text" placeholder="555555"/>
                     </Form.Item>
 
-                    {<PhoneNumberFiled/>}
+                    {<PhoneNumberField/>}
 
                     <Row justify="end" style={{columnGap: 20}}>
                         <Button type="default" onClick={handleCancel}>Отмена</Button>
