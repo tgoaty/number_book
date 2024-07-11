@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {Button, Modal, Form, Row, Input} from "antd";
-import {Record} from "@/shared/types/types";
 import {useDispatch, useSelector} from "react-redux";
 import {addRecord} from "@/app/store/redusers/recordsSlice";
 import {RootState} from "@/app/store/store";
 import PhoneNumberFiled from "@/features/addNewRecord/ui/PhoneNumberFiled.tsx";
-import {isLetter, isDigit, isDuplicate} from "@/features/addNewRecord/utils/utils.ts";
-
+import {isLetter, isDigit, isDuplicate, normalizeFormValue} from "@/features/addNewRecord/utils/utils.ts";
+import {NotNormalizedFormValue} from "@/features/addNewRecord/types/types.ts";
 const AddNewRecordModal: React.FC = () => {
     const [isModalOpen, setIsModelOpen] = useState(false);
     const [form] = Form.useForm();
@@ -26,9 +25,10 @@ const AddNewRecordModal: React.FC = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         form.validateFields()
-            .then((value: Record) => {
-                if (!isDuplicate(value, recordsList)) {
-                    dispatch(addRecord(value));
+            .then((value: NotNormalizedFormValue) => {
+                const normalizedValue = normalizeFormValue(value);
+                if (!isDuplicate(normalizedValue, recordsList)) {
+                    dispatch(addRecord(normalizedValue));
                     setIsModelOpen(false);
                     form.resetFields();
                 } else {

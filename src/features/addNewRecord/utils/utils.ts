@@ -1,5 +1,6 @@
 import React from "react";
 import {Record} from "@/shared/types/types.ts";
+import {NotNormalizedFormValue} from "@/features/addNewRecord/types/types.ts";
 
 
 
@@ -26,4 +27,10 @@ export const isDuplicate = (value: Record, recordsList: Record[]): boolean => {
     } else {
         return false;
     }
+}
+
+export const normalizeFormValue = (value: NotNormalizedFormValue): Record => {
+    value.mobileNumber = value.prefix + value.mobileNumber
+    delete value.prefix
+    return value
 }

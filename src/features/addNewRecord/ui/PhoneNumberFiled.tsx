@@ -22,9 +22,8 @@ const PhoneNumberFiled = () => {
         return Promise.resolve();
     };
 
-    const prefixSelector = (<Form.Item noStyle>
+    const prefixSelector = (<Form.Item name="prefix" initialValue="+7" noStyle>
         <Select
-            defaultValue="+7"
             showSearch
             onSelect={(_, option: CountryOption) => handleSelect(option)}
             style={{width: 90}}
