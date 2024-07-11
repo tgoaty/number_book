@@ -6,3 +6,11 @@ export type Record = {
     homeNumber: string,
     mobileNumber: string
 }
+export type ColumnType = {
+    title: string,
+    dataIndex?: string,
+    key: string,
+    editable?: boolean,
+    width: string,
+    render?: (_: any, record: Record) => any
+}

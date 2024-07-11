@@ -4,16 +4,7 @@ import {RootState} from '@/app/store/store';
 import {Form, Button, Table, Popconfirm, FormInstance} from 'antd';
 import {changeRecordField, deleteRecord} from '@/app/store/redusers/recordsSlice';
 import EditableCell from '@/shared/ui/EditableCell';
-import {Record} from '@/shared/types/types';
-
-type ColumnType = {
-    title: string,
-    dataIndex?: string,
-    key: string,
-    editable?: boolean,
-    width: string,
-    render?: (_: any, record: Record) => any
-}
+import {ColumnType, Record} from '@/shared/types/types';
 
 const RecordsListBlock: React.FC = () => {
     const recordsList = useSelector((state: RootState) => state.recordsSlice.recordsList);
@@ -34,12 +25,13 @@ const RecordsListBlock: React.FC = () => {
         setIsEditing({});
     };
 
-
     const handleSave = async (key: string) => {
         try {
             const row = await form.validateFields() as Partial<Record>;
             (Object.keys(row) as Array<keyof Record>).forEach((field) => {
-                dispatch(changeRecordField({mobileNumber: key, field, newValue: row[field] as string}));
+                dispatch(changeRecordField(
+                    {mobileNumber: key, field, newValue: row[field] as string}
+                ));
             });
             handleCancel();
         } catch (errInfo) {
@@ -48,7 +40,7 @@ const RecordsListBlock: React.FC = () => {
     };
 
     const handleDelete = (record: Record) => {
-        dispatch(deleteRecord(record.mobileNumber));
+        dispatch(deleteRecord(record.mobileNumber))
     };
 
     const columns: ColumnType[] = [
