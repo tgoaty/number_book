@@ -28,7 +28,7 @@ export const isDuplicate = (value: Record, recordsList: Record[]): boolean => {
         return false;
     }
 }
-export const mobileNumberDuplicate = (mobileNumber: string, recordList): boolean => {
+export const mobileNumberDuplicate = (mobileNumber: string, recordList: Record[]): boolean => {
     if (recordList.find((item) => item.mobileNumber === mobileNumber)) return true
     return false
 }
