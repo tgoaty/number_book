@@ -45,16 +45,16 @@ const RecordsListBlock: React.FC = () => {
 
     const columns: ColumnType[] = [
         {
-            title: 'Имя',
-            dataIndex: 'firstName',
-            key: 'firstName',
+            title: 'Фамилия',
+            dataIndex: 'lastName',
+            key: 'lastName',
             editable: true,
             width: '10%',
         },
         {
-            title: 'Фамилия',
-            dataIndex: 'lastName',
-            key: 'lastName',
+            title: 'Имя',
+            dataIndex: 'firstName',
+            key: 'firstName',
             editable: true,
             width: '10%',
         },

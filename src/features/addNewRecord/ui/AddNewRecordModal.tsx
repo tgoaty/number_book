@@ -4,7 +4,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {addRecord} from "@/app/store/redusers/recordsSlice";
 import {RootState} from "@/app/store/store";
 import PhoneNumberField from "@/features/addNewRecord/ui/PhoneNumberField.tsx";
-import {isLetter, isDigit, isDuplicate, normalizeFormValue} from "@/features/addNewRecord/utils/utils.ts";
+import {
+    isLetter,
+    isDigit,
+    isDuplicate,
+    normalizeFormValue,
+    mobileNumberDuplicate
+} from "@/features/addNewRecord/utils/utils.ts";
 import {NotNormalizedFormValue} from "@/features/addNewRecord/types/types.ts";
 
 const AddNewRecordModal: React.FC = () => {
@@ -28,12 +34,15 @@ const AddNewRecordModal: React.FC = () => {
         form.validateFields()
             .then((value: NotNormalizedFormValue) => {
                 const normalizedValue = normalizeFormValue(value);
-                if (!isDuplicate(normalizedValue, recordsList)) {
-                    dispatch(addRecord(normalizedValue));
-                    setIsModelOpen(false);
-                    form.resetFields();
+                if (mobileNumberDuplicate(normalizedValue.mobileNumber, recordsList)) {
+                    alert('Такой номер уже записан')
                 } else {
-                    alert('Пользователь с таким ФИО и адресом уже существует');
+                    if (!isDuplicate(normalizedValue, recordsList)) {
+                        dispatch(addRecord(normalizedValue));
+                        setIsModelOpen(false);
+                    } else {
+                        alert('Пользователь с таким ФИО и адресом уже существует');
+                    }
                 }
             })
             .catch((errInfo) => {
@@ -64,17 +73,17 @@ const AddNewRecordModal: React.FC = () => {
                     initialValues={{remember: true}}
                     autoComplete="off"
                 >
-                    <Form.Item name="firstName" label="Имя"
-                               rules={[{required: true, message: 'Пожалуйста введите своё имя!'}]}>
-                        <Input onKeyPress={(e) => {
-                            isLetter(e)
-                        }} type="text" placeholder="Иван"/>
-                    </Form.Item>
                     <Form.Item name="lastName" label="Фамилия"
                                rules={[{required: true, message: 'Пожалуйста введите свою фамилию!'}]}>
                         <Input onKeyPress={(e) => {
                             isLetter(e)
                         }} type="text" placeholder="Иванов"/>
+                    </Form.Item>
+                    <Form.Item name="firstName" label="Имя"
+                               rules={[{required: true, message: 'Пожалуйста введите своё имя!'}]}>
+                        <Input onKeyPress={(e) => {
+                            isLetter(e)
+                        }} type="text" placeholder="Иван"/>
                     </Form.Item>
                     <Form.Item name="secondName" label="Отчество"
                                rules={[{required: true, message: 'Пожалуйста введите своё отчество!'}]}>

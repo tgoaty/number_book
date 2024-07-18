@@ -15,7 +15,7 @@ const recordsSlice = createSlice({
     initialState,
     reducers: {
         addRecord(state, action: PayloadAction<Record>) {
-            state.recordsList = [...state.recordsList, action.payload];
+            state.recordsList = [action.payload, ...state.recordsList];
         },
         deleteRecord(state, action: PayloadAction<string>) {
             state.recordsList = state.recordsList.filter((item) => item.mobileNumber !== action.payload);
