@@ -1,7 +1,7 @@
 import {Form, Input, Select} from "antd";
 import {listOfCodes} from "@/features/addNewRecord/modal/listOfCountryCodes.ts";
-import React, {useState} from "react";
-import {isDigit} from "@/features/addNewRecord/utils/utils.ts";
+import {useState} from "react";
+import {handlePasteDigits, isDigit} from "@/shared/utils/inputUtils.ts";
 import {CountryOption} from "@/features/addNewRecord/types/types.ts";
 
 const PhoneNumberField = () => {
@@ -48,9 +48,8 @@ const PhoneNumberField = () => {
                        message: 'Пожалуйста введите свой мобильный номер!'
                    }, {validator: validatePhoneNumber}]}>
             <Input
-                onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    isDigit(e)
-                }}
+                onKeyPress={isDigit}
+                onPaste={handlePasteDigits}
                 addonBefore={prefixSelector}
                 placeholder={mask}
                 style={{width: '100%'}}

@@ -141,6 +141,8 @@ const RecordsListBlock: React.FC = () => {
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing[record.mobileNumber],
+                onlyDigits: col.dataIndex === "homeNumber" || col.dataIndex === "mobileNumber",
+                onlyLetters: col.dataIndex === "firstName" || col.dataIndex === "secondName" || col.dataIndex === "lastName"
             }),
         } as ColumnType;
     });

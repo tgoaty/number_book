@@ -32,11 +32,14 @@ const recordsSlice = createSlice({
                 return item;
             });
         },
+        addNewRecordsBook(state, action: PayloadAction<Record[]>) {
+            state.recordsList = [...action.payload, ...state.recordsList];
+        },
         loadNewRecordsBook(state, action: PayloadAction<Record[]>) {
             state.recordsList = action.payload;
         }
     },
 });
 
-export const { addRecord, deleteRecord, changeRecordField, loadNewRecordsBook } = recordsSlice.actions;
+export const { addRecord, deleteRecord, changeRecordField, loadNewRecordsBook, addNewRecordsBook } = recordsSlice.actions;
 export default recordsSlice.reducer;

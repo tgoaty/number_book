@@ -1,6 +1,7 @@
 import {Form, Input} from "antd";
 import React from "react";
 import {Record} from "@/shared/types/types.ts";
+import {handlePasteDigits, handlePasteLetters, isDigit, isLetter} from "@/shared/utils/inputUtils.ts";
 
 interface EditableCellProps {
     editing: boolean;
@@ -10,9 +11,13 @@ interface EditableCellProps {
     record: Record;
     index: number;
     children: React.ReactNode;
+    onlyDigits?: boolean;
+    onlyLetters?: boolean
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
+                                                       onlyDigits,
+                                                       onlyLetters,
                                                        editing,
                                                        dataIndex,
                                                        title,
@@ -30,7 +35,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
                     style={{margin: 0}}
                     rules={[{required: true, message: `Please Input ${title}!`}]}
                 >
-                    <Input/>
+                    {onlyLetters
+                        ? <Input onKeyPress={isLetter}
+                                 onPaste={handlePasteLetters}/>
+                        : onlyDigits
+                            ? <Input onKeyPress={isDigit}
+                                     onPaste={handlePasteDigits}/>
+                            : <Input/>}
                 </Form.Item>
             ) : (
                 children

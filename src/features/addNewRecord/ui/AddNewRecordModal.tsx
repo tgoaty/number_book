@@ -5,27 +5,27 @@ import {addRecord} from "@/app/store/redusers/recordsSlice";
 import {RootState} from "@/app/store/store";
 import PhoneNumberField from "@/features/addNewRecord/ui/PhoneNumberField.tsx";
 import {
-    isLetter,
-    isDigit,
     isDuplicate,
     normalizeFormValue,
     mobileNumberDuplicate
 } from "@/features/addNewRecord/utils/utils.ts";
 import {NotNormalizedFormValue} from "@/features/addNewRecord/types/types.ts";
+import {handlePasteDigits, handlePasteLetters, isDigit, isLetter} from "@/shared/utils/inputUtils.ts";
 
 const AddNewRecordModal: React.FC = () => {
-    const [isModalOpen, setIsModelOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
 
     const recordsList = useSelector((state: RootState) => state.recordsSlice.recordsList);
     const dispatch = useDispatch();
 
     const showModal = () => {
-        setIsModelOpen(true);
+        form.resetFields();
+        setIsModalOpen(true);
     };
 
     const handleCancel = () => {
-        setIsModelOpen(false);
+        setIsModalOpen(false);
         form.resetFields();
     }
 
@@ -39,7 +39,8 @@ const AddNewRecordModal: React.FC = () => {
                 } else {
                     if (!isDuplicate(normalizedValue, recordsList)) {
                         dispatch(addRecord(normalizedValue));
-                        setIsModelOpen(false);
+                        setIsModalOpen(false)
+
                     } else {
                         alert('Пользователь с таким ФИО и адресом уже существует');
                     }
@@ -47,7 +48,7 @@ const AddNewRecordModal: React.FC = () => {
             })
             .catch((errInfo) => {
                 console.log('Validate Failed:', errInfo);
-            });
+            })
     };
 
     const validatePhoneNumber = (_: any, value: string) => {
@@ -75,37 +76,52 @@ const AddNewRecordModal: React.FC = () => {
                 >
                     <Form.Item name="lastName" label="Фамилия"
                                rules={[{required: true, message: 'Пожалуйста введите свою фамилию!'}]}>
-                        <Input onKeyPress={(e) => {
-                            isLetter(e)
-                        }} type="text" placeholder="Иванов"/>
+                        <Input
+                            onKeyPress={isLetter}
+                            onPaste={handlePasteLetters}
+                            type="text"
+                            placeholder="Иванов"
+                        />
                     </Form.Item>
                     <Form.Item name="firstName" label="Имя"
                                rules={[{required: true, message: 'Пожалуйста введите своё имя!'}]}>
-                        <Input onKeyPress={(e) => {
-                            isLetter(e)
-                        }} type="text" placeholder="Иван"/>
+                        <Input
+                            onKeyPress={isLetter}
+                            onPaste={handlePasteLetters}
+                            type="text"
+                            placeholder="Иван"
+                        />
                     </Form.Item>
                     <Form.Item name="secondName" label="Отчество"
                                rules={[{required: true, message: 'Пожалуйста введите своё отчество!'}]}>
-                        <Input onKeyPress={(e) => {
-                            isLetter(e)
-                        }} type="text" placeholder="Иванович"/>
+                        <Input
+                            onKeyPress={isLetter}
+                            onPaste={handlePasteLetters}
+                            type="text"
+                            placeholder="Иванович"
+                        />
                     </Form.Item>
                     <Form.Item name="address" label="Адрес"
                                rules={[{required: true, message: 'Пожалуйста введите свой адрес!'}]}>
-                        <Input type="text" placeholder="г. Заринск ул. Пушкина д. 1"/>
+                        <Input
+                            type="text"
+                            placeholder="г. Заринск ул. Пушкина д. 1"
+                        />
                     </Form.Item>
                     <Form.Item name="homeNumber" label="Домашний Номер"
                                rules={[{
                                    required: true,
                                    message: 'Пожалуйста введите свой домашний номер!'
                                }, {validator: validatePhoneNumber}]}>
-                        <Input onKeyPress={(e) => {
-                            isDigit(e)
-                        }} type="text" placeholder="555555"/>
+                        <Input
+                            onKeyPress={isDigit}
+                            onPaste={handlePasteDigits}
+                            type="text"
+                            placeholder="555555"
+                        />
                     </Form.Item>
 
-                    {<PhoneNumberField/>}
+                    <PhoneNumberField/>
 
                     <Row justify="end" style={{columnGap: 20}}>
                         <Button type="default" onClick={handleCancel}>Отмена</Button>
