@@ -1,23 +1,26 @@
 import React, {useState} from 'react';
-import {Button, Checkbox, Modal, Upload} from "antd";
+import {Button, Checkbox, Modal, notification, Upload} from "antd";
 import {UploadOutlined, VerticalAlignTopOutlined} from "@ant-design/icons";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Papa from "papaparse";
-import {addNewRecordsBook, loadNewRecordsBook} from "@/app/store/redusers/recordsSlice";
+import {addRecord, loadNewRecordsBook} from "@/app/store/redusers/recordsSlice";
 import {Record} from "@/shared/types/types";
 import {RcFile} from "antd/es/upload";
+import {RootState} from "@/app/store/store.ts";
+import {NotificationPlacement} from "antd/es/notification/interface";
 
 const LoadCsvFile: React.FC = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [checkboxMode, setCheckboxMode] = useState(false)
+    const [modalIsOpen, setIsModalOpen] = useState(false);
+    const [checkboxMode, setCheckboxMode] = useState(false);
+    const recordsList = useSelector((state: RootState) => state.recordsSlice.recordsList);
     const dispatch = useDispatch();
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
+    const openNotification = (placement: NotificationPlacement, number: string) => {
+        notification.info({
+            message: `Не вышло добавить ${number}.`,
+            description: 'Такой номер уже существует',
+            placement
+        });
     };
 
     const handleUpload = (file: RcFile): boolean => {
@@ -31,24 +34,38 @@ const LoadCsvFile: React.FC = () => {
                     if (checkboxMode) {
                         dispatch(loadNewRecordsBook(records));
                     } else {
-                        dispatch(addNewRecordsBook(records));
+                        records.forEach((item) => {
+                            const existingRecord = recordsList.find((record) => record.mobileNumber === item.mobileNumber);
+                            if (existingRecord) {
+                                openNotification('bottomRight', item.mobileNumber);
+                            } else {
+                                dispatch(addRecord(item));
+                            }
+                        });
                     }
-
                 }
             });
         };
 
         reader.readAsText(file as File);
-        setIsModalOpen(false);
         return false;
+        setIsModalOpen(false);
     };
 
     return (
         <>
-            <Button title="Загрузить CSV" onClick={showModal}>
+            <Button title="Загрузить CSV" onClick={() => {
+                setIsModalOpen(true);
+                setCheckboxMode(false);
+            }}>
                 <VerticalAlignTopOutlined style={{fontSize: 20}}/>
             </Button>
-            <Modal footer={null} title="Загрузить свою номерную книгу" open={isModalOpen} onCancel={handleCancel}>
+            <Modal
+                footer={null}
+                title="Загрузить свою номерную книгу"
+                open={modalIsOpen}
+                onCancel={() => setIsModalOpen(false)}
+            >
                 <Upload
                     beforeUpload={handleUpload}
                     accept=".csv"
@@ -56,8 +73,10 @@ const LoadCsvFile: React.FC = () => {
                 >
                     <Button icon={<UploadOutlined/>}>Загрузить CSV</Button>
                 </Upload>
-                <Checkbox style={{marginTop: 20}} onChange={(e) => setCheckboxMode(e.target.checked)}>Полностью заменить
-                    текущую книгу на новую.</Checkbox>
+                <Checkbox checked={checkboxMode} defaultChecked={false} style={{marginTop: 20}}
+                          onChange={(e) => setCheckboxMode(e.target.checked)}>
+                    Полностью заменить текущую книгу на новую.
+                </Checkbox>
             </Modal>
         </>
     );

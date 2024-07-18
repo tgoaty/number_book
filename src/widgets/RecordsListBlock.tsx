@@ -13,7 +13,7 @@ const RecordsListBlock: React.FC = () => {
     const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
-        localStorage.setItem('records', JSON.stringify(recordsList));
+        localStorage.setItem('numberBook:records', JSON.stringify(recordsList));
     }, [recordsList]);
 
     const handleEdit = (record: Record) => {
@@ -50,6 +50,7 @@ const RecordsListBlock: React.FC = () => {
             key: 'lastName',
             editable: true,
             width: '10%',
+            ellipsis: true,
         },
         {
             title: 'Имя',
@@ -57,6 +58,7 @@ const RecordsListBlock: React.FC = () => {
             key: 'firstName',
             editable: true,
             width: '10%',
+            ellipsis: true,
         },
         {
             title: 'Отчество',
@@ -64,6 +66,7 @@ const RecordsListBlock: React.FC = () => {
             key: 'secondName',
             editable: true,
             width: '10%',
+            ellipsis: true,
         },
         {
             title: 'Адрес',
@@ -71,6 +74,7 @@ const RecordsListBlock: React.FC = () => {
             key: 'address',
             editable: true,
             width: '20%',
+            ellipsis: true,
         },
         {
             title: 'Домашний номер',

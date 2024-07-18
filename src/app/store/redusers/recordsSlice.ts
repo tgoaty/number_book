@@ -5,7 +5,7 @@ interface RecordsState {
     recordsList: Record[];
 }
 
-const initialList: Record[] = localStorage.getItem("records") ? JSON.parse(localStorage.getItem("records") as string) : [];
+const initialList: Record[] = localStorage.getItem("numberBook:records") ? JSON.parse(localStorage.getItem("numberBook:records") as string) : [];
 const initialState: RecordsState = {
     recordsList: [...initialList]
 };
@@ -32,14 +32,11 @@ const recordsSlice = createSlice({
                 return item;
             });
         },
-        addNewRecordsBook(state, action: PayloadAction<Record[]>) {
-            state.recordsList = [...action.payload, ...state.recordsList];
-        },
         loadNewRecordsBook(state, action: PayloadAction<Record[]>) {
             state.recordsList = action.payload;
         }
     },
 });
 
-export const { addRecord, deleteRecord, changeRecordField, loadNewRecordsBook, addNewRecordsBook } = recordsSlice.actions;
+export const { addRecord, deleteRecord, changeRecordField, loadNewRecordsBook } = recordsSlice.actions;
 export default recordsSlice.reducer;

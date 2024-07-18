@@ -7,6 +7,7 @@ export interface Record {
     mobileNumber: string
 }
 export interface ColumnType {
+    ellipsis?: boolean,
     title: string,
     dataIndex?: string,
     key: string,
