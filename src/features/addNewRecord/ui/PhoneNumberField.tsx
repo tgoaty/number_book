@@ -5,12 +5,13 @@ import {handlePasteDigits, isDigit} from "@/shared/utils/inputUtils.ts";
 import {CountryOption} from "@/features/addNewRecord/types/types.ts";
 
 const PhoneNumberField = () => {
-    const [mask, setMask] = useState<string>('000 000 00 00');
+    const [mask, setMask] = useState<string>('0000000000');
+
     const handleSelect = (option: CountryOption) => {
         const countryCode = option.key;
         const selectedCode = listOfCodes.find((item) => item.iso === countryCode);
         if (selectedCode) {
-            setMask(selectedCode.phoneNumberFormat);
+            setMask(selectedCode.phoneNumberFormat.replace(/\s/g, ''));
         }
     };
 

@@ -21,7 +21,7 @@ export const isLetter = (e: React.KeyboardEvent<HTMLInputElement>) => {
 }
 
 export const isDigit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!(e.key >= '0' && e.key <= '9')) {
+    if (!(e.key >= '0' && e.key <= '9' || e.key === '+')) {
         e.preventDefault();
     }
 }

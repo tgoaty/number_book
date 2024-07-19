@@ -125,7 +125,7 @@ const AddNewRecordModal: React.FC = () => {
 
                     <Row justify="end" style={{columnGap: 20}}>
                         <Button type="default" onClick={handleCancel}>Отмена</Button>
-                        <Button type="primary" htmlType="submit">Отправить</Button>
+                        <Button type="primary" htmlType="submit">Добавить</Button>
                     </Row>
                 </Form>
             </Modal>

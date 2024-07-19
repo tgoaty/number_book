@@ -111,13 +111,6 @@ const RecordsListBlock: React.FC = () => {
                     </>
                 ) : (
                     <>
-                        <Button
-                            style={{marginRight: 8}}
-                            disabled={Object.values(isEditing).some((val) => val)}
-                            onClick={() => handleEdit(record)}
-                        >
-                            Редактировать
-                        </Button>
                         <Popconfirm
                             cancelText="Отмена"
                             title="Удалить строку?"
@@ -127,6 +120,14 @@ const RecordsListBlock: React.FC = () => {
                                 Удалить
                             </Button>
                         </Popconfirm>
+                        <Button
+                            style={{marginRight: 8}}
+                            disabled={Object.values(isEditing).some((val) => val)}
+                            onClick={() => handleEdit(record)}
+                        >
+                            Редактировать
+                        </Button>
+
                     </>
                 );
             },
@@ -154,6 +155,7 @@ const RecordsListBlock: React.FC = () => {
     return (
         <Form form={form} component={false}>
             <Table
+                size={"small"}
                 rowKey={(record) => record.mobileNumber}
                 bordered
                 dataSource={recordsList}

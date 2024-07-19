@@ -9,7 +9,7 @@ const GetCsvFile = () => {
     const recordList = useSelector((state: RootState) => (state.recordsSlice.recordsList))
 
     const downloadCSV = () => {
-        const csv = Papa.unparse(recordList);
+        const csv = Papa.unparse(recordList, { delimiter: ";" });
         const blob = new Blob(["\uFEFF" + csv], {type: 'text/csv;charset=utf-8;'});
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
