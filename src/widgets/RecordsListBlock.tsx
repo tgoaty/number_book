@@ -155,7 +155,7 @@ const RecordsListBlock: React.FC = () => {
     return (
         <Form form={form} component={false}>
             <Table
-                size={"small"}
+                size={"middle"}
                 rowKey={(record) => record.mobileNumber}
                 bordered
                 dataSource={recordsList}
@@ -163,7 +163,7 @@ const RecordsListBlock: React.FC = () => {
                 components={{
                     body: {
                         cell: EditableCell,
-                    },
+                    }
                 }}
             />
         </Form>
